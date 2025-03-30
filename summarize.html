@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Summarization | AI Tools</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="script.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a;
+            color: white;
+        }
+        textarea {
+            min-height: 200px;
+        }
+        .word-count {
+            color: #94a3b8;
+            font-size: 0.875rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="min-h-screen flex flex-col">
+        <!-- Navigation -->
+        <nav class="bg-gray-900/80 backdrop-blur-md sticky top-0 z-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between h-16">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <a href="index.html" class="text-xl font-bold bg-gradient-to-r from-purple-500 to-blue-500 bg-clip-text text-transparent">AI Tools</a>
+                        </div>
+                    </div>
+                    <div class="hidden md:block">
+                        <div class="ml-10 flex items-baseline space-x-4">
+                            <a href="index.html" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-800">Home</a>
+                            <a href="chat.html" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-800">Chat</a>
+                            <a href="summarize.html" class="px-3 py-2 rounded-md text-sm font-medium bg-gray-800 text-white">Summarize</a>
+                            <a href="analyze.html" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-800">Analyze</a>
+                            <a href="generate.html" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-800">Generate</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <div class="flex-1 max-w-4xl w-full mx-auto px-4 py-8">
+            <h1 class="text-3xl font-bold mb-6">Text Summarization</h1>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Input Section -->
+                <div>
+                    <div class="flex justify-between items-center mb-2">
+                        <label for="inputText" class="block font-medium">Original Text</label>
+                        <span id="inputCount" class="word-count">0 words</span>
+                    </div>
+                    <textarea 
+                        id="inputText" 
+                        class="w-full bg-gray-800 border border-gray-700 rounded-md p-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        placeholder="Paste or type the text you want to summarize here..."
+                    ></textarea>
+                    <button 
+                        id="summarizeBtn" 
+                        class="mt-4 w-full bg-blue-600 hover:bg-blue-700 px-4 py-3 rounded-md font-medium transition"
+                    >
+                        Summarize Text
+                    </button>
+                </div>
+
+                <!-- Output Section -->
+                <div>
+                    <div class="flex justify-between items-center mb-2">
+                        <label for="outputText" class="block font-medium">Summary</label>
+                        <span id="outputCount" class="word-count">0 words</span>
+                    </div>
+                    <div id="outputText" class="w-full bg-gray-800 border border-gray-700 rounded-md p-4 min-h-[200px]">
+                        <p class="text-gray-400">Your summary will appear here...</p>
+                    </div>
+                    <div class="mt-4 flex space-x-2">
+                        <button 
+                            id="copyBtn" 
+                            class="flex-1 bg-gray-700 hover:bg-gray-600 px-4 py-3 rounded-md font-medium transition flex items-center justify-center space-x-2"
+                            disabled
+                        >
+                            <i class="fas fa-copy"></i>
+                            <span>Copy</span>
+                        </button>
+                        <button 
+                            id="clearBtn" 
+                            class="flex-1 bg-gray-700 hover:bg-gray-600 px-4 py-3 rounded-md font-medium transition flex items-center justify-center space-x-2"
+                        >
+                            <i class="fas fa-trash-alt"></i>
+                            <span>Clear</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Examples Section -->
+            <div class="mt-12">
+                <h2 class="text-xl font-semibold mb-4">Try with example text</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <button 
+                        class="example-btn bg-gray-800 hover:bg-gray-700 p-4 rounded-md text-left transition"
+                        data-example="news"
+                    >
+                        <h3 class="font-medium mb-1">News Article</h3>
+                        <p class="text-sm text-gray-400">Summarize a news story about technology</p>
+                    </button>
+                    <button 
+                        class="example-btn bg-gray-800 hover:bg-gray-700 p-4 rounded-md text-left transition"
+                        data-example="research"
+                    >
+                        <h3 class="font-medium mb-1">Research Paper</h3>
+                        <p class="text-sm text-gray-400">Condense academic research findings</p>
+                    </button>
+                    <button 
+                        class="example-btn bg-gray-800 hover:bg-gray-700 p-4 rounded-md text-left transition"
+                        data-example="meeting"
+                    >
+                        <h3 class="font-medium mb-1">Meeting Notes</h3>
+                        <p class="text-sm text-gray-400">Extract key points from lengthy notes</p>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const inputText = document.getElementById('inputText');
+            const outputText = document.getElementById('outputText');
+            const summarizeBtn = document.getElementById('summarizeBtn');
+            const copyBtn = document.getElementById('copyBtn');
+            const clearBtn = document.getElementById('clearBtn');
+            const inputCount = document.getElementById('inputCount');
+            const outputCount = document.getElementById('outputCount');
+            const exampleBtns = document.querySelectorAll('.example-btn');
+
+            // Example texts
+            const examples = {
+                news: `Scientists have made a breakthrough in quantum computing, developing a new processor that can perform calculations 100 times faster than current models. The team from MIT published their findings in the journal Nature, demonstrating a 72-qubit processor that maintains quantum coherence for unprecedented durations. This advancement could revolutionize fields from cryptography to drug discovery, potentially solving problems that would take classical computers thousands of years. However, challenges remain in scaling the technology and reducing error rates before practical applications become widespread. The researchers estimate commercial quantum computers may still be 5-10 years away.`,
+                research: `A comprehensive meta-analysis of 127 clinical studies involving over 2.5 million participants has revealed significant correlations between regular physical exercise and reduced incidence of neurodegenerative diseases. The research, conducted across 15 countries over a 10-year period, found that individuals engaging in at least 150 minutes of moderate exercise weekly showed a 30-40% lower risk of developing Alzheimer's and Parkinson's diseases. The protective effects were most pronounced for aerobic activities and appeared to be dose-dependent. Researchers hypothesize these benefits stem from exercise-induced increases in brain-derived neurotrophic factor (BDNF), enhanced cerebral blood flow, and reduced systemic inflammation. The study was published in The Lancet Neurology with an impact factor of 9.8.`,
+                meeting: `The quarterly product strategy meeting covered several key initiatives. First, the UX team presented findings from recent user testing, highlighting pain points in the checkout flow that are causing a 15% drop-off rate. Engineering reported they're on track for the Q3 release but need additional resources to address technical debt. Marketing shared plans for the holiday campaign, requesting product features to support promotional bundles. Customer support metrics showed a 20% increase in ticket volume, primarily about the new pricing structure. The leadership team approved moving forward with: 1) A checkout redesign sprint starting next month, 2) Hiring two additional backend engineers, 3) Creating a pricing FAQ page, and 4) Forming a cross-functional team to evaluate subscription model options. Next steps include drafting project charters and setting up working sessions for each initiative.`
+            };
+
+            // Update word count
+            function updateWordCount(text, element) {
+                const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+                element.textContent = `${words} words`;
+                return words;
+            }
+
+            // Handle input changes
+            inputText.addEventListener('input', () => {
+                updateWordCount(inputText.value, inputCount);
+            });
+
+            // Example buttons
+            exampleBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    inputText.value = examples[btn.dataset.example];
+                    updateWordCount(inputText.value, inputCount);
+                });
+            });
+
+            // Summarize button
+            summarizeBtn.addEventListener('click', async () => {
+                const text = inputText.value.trim();
+                if (!text) {
+                    outputText.innerHTML = '<p class="text-red-400">Please enter some text to summarize</p>';
+                    return;
+                }
+
+                if (updateWordCount(text, inputCount) < 30) {
+                    outputText.innerHTML = '<p class="text-red-400">Text is too short to summarize (minimum 30 words)</p>';
+                    return;
+                }
+
+                // Show loading state
+                const originalBtnText = summarizeBtn.innerHTML;
+                summarizeBtn.innerHTML = '<div class="flex items-center justify-center space-x-2"><div class="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div><span>Processing...</span></div>';
+                summarizeBtn.disabled = true;
+
+                try {
+                    // Create prompt for summarization
+                    const prompt = `Please summarize the following text, keeping the key points and main ideas. Make the summary concise but comprehensive. Return only the summary text without any additional commentary or formatting.\n\nText: ${text}`;
+
+                    // Call API
+                    const response = await AITools.textCompletion(prompt);
+                    const summary = response.choices[0].text.trim();
+
+                    // Display results
+                    outputText.innerHTML = `<p class="whitespace-pre-line">${summary}</p>`;
+                    updateWordCount(summary, outputCount);
+                    copyBtn.disabled = false;
+                } catch (error) {
+                    console.error('Summarization error:', error);
+                    outputText.innerHTML = AITools.showError(error.message || 'Failed to generate summary').outerHTML;
+                } finally {
+                    // Restore button
+                    summarizeBtn.innerHTML = originalBtnText;
+                    summarizeBtn.disabled = false;
+                }
+            });
+
+            // Copy button
+            copyBtn.addEventListener('click', () => {
+                const textToCopy = outputText.textContent;
+                if (textToCopy && !textToCopy.includes('Your summary will appear here')) {
+                    navigator.clipboard.writeText(textToCopy)
+                        .then(() => {
+                            const originalText = copyBtn.innerHTML;
+                            copyBtn.innerHTML = '<i class="fas fa-check"></i><span>Copied!</span>';
+                            setTimeout(() => {
+                                copyBtn.innerHTML = originalText;
+                            }, 2000);
+                        })
+                        .catch(err => {
+                            console.error('Failed to copy:', err);
+                        });
+                }
+            });
+
+            // Clear button
+            clearBtn.addEventListener('click', () => {
+                inputText.value = '';
+                outputText.innerHTML = '<p class="text-gray-400">Your summary will appear here...</p>';
+                inputCount.textContent = '0 words';
+                outputCount.textContent = '0 words';
+                copyBtn.disabled = true;
+            });
+        });
+    </script>
+</body>
+</html>
