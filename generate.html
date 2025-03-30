@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Generation | AI Tools</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="script.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a;
+            color: white;
+        }
+        .image-placeholder {
+            background-color: #1e293b;
+            border: 2px dashed #334155;
+        }
+        .prompt-examples {
+            scrollbar-width: thin;
+            scrollbar-color: #4b5563 #1e293b;
+        }
+        .prompt-examples::-webkit-scrollbar {
+            height: 6px;
+        }
+        .prompt-examples::-webkit-scrollbar-track {
+            background: #1e293b;
+        }
+        .prompt-examples::-webkit-scrollbar-thumb {
+            background-color: #4b5563;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <div class="min-h-screen flex flex-col">
+        <!-- Navigation -->
+        <nav class="bg-gray-900/80 backdrop-blur-md sticky top-0 z-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between h-16">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <a href="index.html" class="text-xl font-bold bg-gradient-to-r from-purple-500 to-blue-500 bg-clip-text text-transparent">AI Tools</a>
+                        </div>
+                    </div>
+                    <div class="hidden md:block">
+                        <div class="ml-10 flex items-baseline space-x-4">
+                            <a href="index.html" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-800">Home</a>
+                            <a href="chat.html" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-800">Chat</a>
+                            <a href="summarize.html" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-800">Summarize</a>
+                            <a href="analyze.html" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-800">Analyze</a>
+                            <a href="generate.html" class="px-3 py-2 rounded-md text-sm font-medium bg-gray-800 text-white">Generate</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <div class="flex-1 max-w-4xl w-full mx-auto px-4 py-8">
+            <h1 class="text-3xl font-bold mb-6">AI Image Generation</h1>
+            
+            <div class="grid grid-cols-1 gap-8">
+                <!-- Prompt Input -->
+                <div>
+                    <label for="promptInput" class="block font-medium mb-2">Image Prompt</label>
+                    <div class="flex space-x-2">
+                        <input 
+                            type="text" 
+                            id="promptInput" 
+                            class="flex-1 bg-gray-800 border border-gray-700 rounded-md px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            placeholder="Describe the image you want to generate (e.g., 'A futuristic city at sunset')"
+                            autocomplete="off"
+                        >
+                        <button 
+                            id="generateBtn" 
+                            class="bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-md font-medium transition whitespace-nowrap"
+                        >
+                            Generate
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Generated Image -->
+                <div>
+                    <div id="imageContainer" class="image-placeholder rounded-lg flex items-center justify-center aspect-square max-w-2xl mx-auto">
+                        <div id="imagePlaceholder" class="text-center p-8">
+                            <i class="fas fa-image text-5xl text-gray-500 mb-4"></i>
+                            <p class="text-gray-400">Your generated image will appear here</p>
+                        </div>
+                        <img id="generatedImage" class="hidden w-full h-full object-cover rounded-lg" alt="Generated image">
+                    </div>
+
+                    <div id="imageActions" class="mt-4 flex justify-center space-x-4 hidden">
+                        <button 
+                            id="downloadBtn" 
+                            class="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded-md font-medium transition flex items-center space-x-2"
+                        >
+                            <i class="fas fa-download"></i>
+                            <span>Download</span>
+                        </button>
+                        <button 
+                            id="newVariationBtn" 
+                            class="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded-md font-medium transition flex items-center space-x-2"
+                        >
+                            <i class="fas fa-sync-alt"></i>
+                            <span>New Variation</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Prompt Examples -->
+                <div>
+                    <h2 class="font-medium mb-2">Prompt Examples</h2>
+                    <div class="prompt-examples overflow-x-auto whitespace-nowrap pb-2 space-x-2">
+                        <button class="prompt-example bg-gray-800 hover:bg-gray-700 px-4 py-2 rounded-md transition">
+                            A cyberpunk city at night with neon lights
+                        </button>
+                        <button class="prompt-example bg-gray-800 hover:bg-gray-700 px-4 py-2 rounded-md transition">
+                            A realistic portrait of a wise old wizard
+                        </button>
+                        <button class="prompt-example bg-gray-800 hover:bg-gray-700 px-4 py-2 rounded-md transition">
+                            A cute corgi puppy wearing a superhero cape
+                        </button>
+                        <button class="prompt-example bg-gray-800 hover:bg-gray-700 px-4 py-2 rounded-md transition">
+                            A futuristic spaceship landing on an alien planet
+                        </button>
+                        <button class="prompt-example bg-gray-800 hover:bg-gray-700 px-4 py-2 rounded-md transition">
+                            A serene landscape with mountains and a lake at sunrise
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const promptInput = document.getElementById('promptInput');
+            const generateBtn = document.getElementById('generateBtn');
+            const imageContainer = document.getElementById('imageContainer');
+            const imagePlaceholder = document.getElementById('imagePlaceholder');
+            const generatedImage = document.getElementById('generatedImage');
+            const imageActions = document.getElementById('imageActions');
+            const downloadBtn = document.getElementById('downloadBtn');
+            const newVariationBtn = document.getElementById('newVariationBtn');
+            const promptExamples = document.querySelectorAll('.prompt-example');
+
+            // Example prompts
+            const examples = [
+                "A cyberpunk city at night with neon lights",
+                "A realistic portrait of a wise old wizard",
+                "A cute corgi puppy wearing a superhero cape",
+                "A futuristic spaceship landing on an alien planet",
+                "A serene landscape with mountains and a lake at sunrise"
+            ];
+
+            // Set example prompts
+            promptExamples.forEach((btn, index) => {
+                btn.textContent = examples[index];
+                btn.addEventListener('click', () => {
+                    promptInput.value = examples[index];
+                });
+            });
+
+            // Current image data
+            let currentImageUrl = null;
+
+            // Generate button
+            generateBtn.addEventListener('click', async () => {
+                const prompt = promptInput.value.trim();
+                if (!prompt) {
+                    alert('Please enter a prompt to generate an image');
+                    return;
+                }
+
+                // Show loading state
+                generateBtn.innerHTML = '<div class="flex items-center space-x-2"><div class="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div><span>Generating...</span></div>';
+                generateBtn.disabled = true;
+                imagePlaceholder.innerHTML = '<div class="flex flex-col items-center"><div class="animate-spin rounded-full h-12 w-12 border-b-2 border-white mb-4"></div><p>Generating your image...</p></div>';
+
+                try {
+                    // Call API
+                    const imageUrl = await AITools.generateImage(prompt);
+                    
+                    // Display image
+                    generatedImage.src = imageUrl;
+                    generatedImage.classList.remove('hidden');
+                    imagePlaceholder.classList.add('hidden');
+                    imageActions.classList.remove('hidden');
+                    
+                    // Store current image data
+                    currentImageUrl = imageUrl;
+                } catch (error) {
+                    console.error('Generation error:', error);
+                    imagePlaceholder.innerHTML = AITools.showError(error.message || 'Failed to generate image').outerHTML;
+                } finally {
+                    // Restore button
+                    generateBtn.innerHTML = 'Generate';
+                    generateBtn.disabled = false;
+                }
+            });
+
+            // Download button
+            downloadBtn.addEventListener('click', async () => {
+                if (!currentImageUrl) return;
+                
+                try {
+                    const response = await fetch(currentImageUrl);
+                    const blob = await response.blob();
+                    const url = window.URL.createObjectURL(blob);
+                    
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `ai-generated-${Date.now()}.png`;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    window.URL.revokeObjectURL(url);
+                } catch (error) {
+                    console.error('Download error:', error);
+                    alert('Failed to download image');
+                }
+            });
+
+            // New variation button
+            newVariationBtn.addEventListener('click', () => {
+                if (promptInput.value.trim()) {
+                    generateBtn.click();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
