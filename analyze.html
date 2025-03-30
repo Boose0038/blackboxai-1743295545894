@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sentiment Analysis | AI Tools</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="script.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a;
+            color: white;
+        }
+        textarea {
+            min-height: 200px;
+        }
+        .sentiment-bar {
+            height: 8px;
+            border-radius: 4px;
+            background: linear-gradient(to right, #ef4444 0%, #f59e0b 50%, #10b981 100%);
+        }
+        .sentiment-indicator {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            position: absolute;
+            top: -4px;
+            transform: translateX(-50%);
+        }
+    </style>
+</head>
+<body>
+    <div class="min-h-screen flex flex-col">
+        <!-- Navigation -->
+        <nav class="bg-gray-900/80 backdrop-blur-md sticky top-0 z-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between h-16">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <a href="index.html" class="text-xl font-bold bg-gradient-to-r from-purple-500 to-blue-500 bg-clip-text text-transparent">AI Tools</a>
+                        </div>
+                    </div>
+                    <div class="hidden md:block">
+                        <div class="ml-10 flex items-baseline space-x-4">
+                            <a href="index.html" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-800">Home</a>
+                            <a href="chat.html" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-800">Chat</a>
+                            <a href="summarize.html" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-800">Summarize</a>
+                            <a href="analyze.html" class="px-3 py-2 rounded-md text-sm font-medium bg-gray-800 text-white">Analyze</a>
+                            <a href="generate.html" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-800">Generate</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <div class="flex-1 max-w-4xl w-full mx-auto px-4 py-8">
+            <h1 class="text-3xl font-bold mb-6">Sentiment Analysis</h1>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Input Section -->
+                <div>
+                    <label for="inputText" class="block font-medium mb-2">Text to Analyze</label>
+                    <textarea 
+                        id="inputText" 
+                        class="w-full bg-gray-800 border border-gray-700 rounded-md p-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        placeholder="Enter text to analyze its sentiment (e.g., product reviews, social media posts, customer feedback)..."
+                    ></textarea>
+                    <button 
+                        id="analyzeBtn" 
+                        class="mt-4 w-full bg-blue-600 hover:bg-blue-700 px-4 py-3 rounded-md font-medium transition"
+                    >
+                        Analyze Sentiment
+                    </button>
+                </div>
+
+                <!-- Results Section -->
+                <div>
+                    <div class="bg-gray-800 rounded-lg p-6 h-full">
+                        <h2 class="text-xl font-semibold mb-4">Analysis Results</h2>
+                        
+                        <div id="resultsPlaceholder" class="text-center py-12">
+                            <i class="fas fa-chart-pie text-4xl text-gray-500 mb-4"></i>
+                            <p class="text-gray-400">Your analysis results will appear here</p>
+                        </div>
+
+                        <div id="resultsContainer" class="hidden">
+                            <!-- Sentiment Score -->
+                            <div class="mb-6">
+                                <div class="flex justify-between mb-2">
+                                    <span>Sentiment Score</span>
+                                    <span id="sentimentScore" class="font-medium">0.75</span>
+                                </div>
+                                <div class="relative mb-1">
+                                    <div class="sentiment-bar"></div>
+                                    <div id="sentimentIndicator" class="sentiment-indicator bg-white border-2 border-gray-900"></div>
+                                </div>
+                                <div class="flex justify-between text-xs text-gray-400">
+                                    <span>Negative</span>
+                                    <span>Neutral</span>
+                                    <span>Positive</span>
+                                </div>
+                            </div>
+
+                            <!-- Sentiment Label -->
+                            <div class="mb-6">
+                                <h3 class="font-medium mb-2">Overall Sentiment</h3>
+                                <div id="sentimentLabel" class="inline-block px-3 py-1 rounded-full text-sm font-medium"></div>
+                            </div>
+
+                            <!-- Key Phrases -->
+                            <div>
+                                <h3 class="font-medium mb-2">Key Phrases</h3>
+                                <div id="keyPhrases" class="flex flex-wrap gap-2"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Examples Section -->
+            <div class="mt-12">
+                <h2 class="text-xl font-semibold mb-4">Try with example text</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <button 
+                        class="example-btn bg-gray-800 hover:bg-gray-700 p-4 rounded-md text-left transition"
+                        data-example="positive"
+                    >
+                        <h3 class="font-medium mb-1">Positive Review</h3>
+                        <p class="text-sm text-gray-400">Example of positive customer feedback</p>
+                    </button>
+                    <button 
+                        class="example-btn bg-gray-800 hover:bg-gray-700 p-4 rounded-md text-left transition"
+                        data-example="negative"
+                    >
+                        <h3 class="font-medium mb-1">Negative Review</h3>
+                        <p class="text-sm text-gray-400">Example of negative customer feedback</p>
+                    </button>
+                    <button 
+                        class="example-btn bg-gray-800 hover:bg-gray-700 p-4 rounded-md text-left transition"
+                        data-example="neutral"
+                    >
+                        <h3 class="font-medium mb-1">Neutral Statement</h3>
+                        <p class="text-sm text-gray-400">Example of neutral, factual text</p>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const inputText = document.getElementById('inputText');
+            const analyzeBtn = document.getElementById('analyzeBtn');
+            const resultsPlaceholder = document.getElementById('resultsPlaceholder');
+            const resultsContainer = document.getElementById('resultsContainer');
+            const sentimentScore = document.getElementById('sentimentScore');
+            const sentimentIndicator = document.getElementById('sentimentIndicator');
+            const sentimentLabel = document.getElementById('sentimentLabel');
+            const keyPhrases = document.getElementById('keyPhrases');
+            const exampleBtns = document.querySelectorAll('.example-btn');
+
+            // Example texts
+            const examples = {
+                positive: `I absolutely love this product! It exceeded all my expectations. The quality is outstanding and it arrived much faster than I anticipated. The customer service was also excellent - they responded to my questions within minutes. I would definitely recommend this to anyone looking for a reliable solution. Five stars!`,
+                negative: `Very disappointed with my purchase. The product stopped working after just two days and the customer support was unhelpful. They refused to honor the warranty and kept transferring me between departments. The item description was misleading about the features. I would not buy from this company again.`,
+                neutral: `The conference will be held on November 15th at the convention center. Registration begins at 8:30 AM with the first session starting at 9:15. Lunch will be provided for all attendees. The event will cover topics including market trends, new technologies, and case studies.`
+            };
+
+            // Example buttons
+            exampleBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    inputText.value = examples[btn.dataset.example];
+                });
+            });
+
+            // Analyze button
+            analyzeBtn.addEventListener('click', async () => {
+                const text = inputText.value.trim();
+                if (!text) {
+                    alert('Please enter some text to analyze');
+                    return;
+                }
+
+                // Show loading state
+                const originalBtnText = analyzeBtn.innerHTML;
+                analyzeBtn.innerHTML = '<div class="flex items-center justify-center space-x-2"><div class="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div><span>Analyzing...</span></div>';
+                analyzeBtn.disabled = true;
+
+                try {
+                    // Call API
+                    const analysis = await AITools.analyzeSentiment(text);
+
+                    // Display results
+                    resultsPlaceholder.classList.add('hidden');
+                    resultsContainer.classList.remove('hidden');
+
+                    // Update sentiment score
+                    const score = analysis.confidence * (analysis.sentiment === 'positive' ? 1 : (analysis.sentiment === 'negative' ? -1 : 0));
+                    const normalizedScore = (score + 1) / 2; // Convert to 0-1 range
+                    sentimentScore.textContent = score.toFixed(2);
+                    
+                    // Position indicator
+                    sentimentIndicator.style.left = `${normalizedScore * 100}%`;
+
+                    // Set sentiment label
+                    sentimentLabel.textContent = analysis.sentiment.charAt(0).toUpperCase() + analysis.sentiment.slice(1);
+                    sentimentLabel.className = 'inline-block px-3 py-1 rounded-full text-sm font-medium ';
+                    
+                    if (analysis.sentiment === 'positive') {
+                        sentimentLabel.classList.add('bg-green-900/50', 'text-green-400');
+                    } else if (analysis.sentiment === 'negative') {
+                        sentimentLabel.classList.add('bg-red-900/50', 'text-red-400');
+                    } else {
+                        sentimentLabel.classList.add('bg-yellow-900/50', 'text-yellow-400');
+                    }
+
+                    // Display key phrases
+                    keyPhrases.innerHTML = '';
+                    if (analysis.key_phrases && analysis.key_phrases.length > 0) {
+                        analysis.key_phrases.forEach(phrase => {
+                            const phraseEl = document.createElement('span');
+                            phraseEl.className = 'bg-gray-700 px-3 py-1 rounded-full text-sm';
+                            phraseEl.textContent = phrase;
+                            keyPhrases.appendChild(phraseEl);
+                        });
+                    } else {
+                        keyPhrases.innerHTML = '<p class="text-gray-400">No key phrases identified</p>';
+                    }
+                } catch (error) {
+                    console.error('Analysis error:', error);
+                    resultsPlaceholder.innerHTML = AITools.showError(error.message || 'Failed to analyze text').outerHTML;
+                } finally {
+                    // Restore button
+                    analyzeBtn.innerHTML = originalBtnText;
+                    analyzeBtn.disabled = false;
+                }
+            });
+        });
+    </script>
+</body>
+</html>
